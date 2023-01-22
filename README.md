@@ -1,70 +1,83 @@
-# Getting Started with Create React App
+# NBMap GL
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+NBMap GL is a web map SDK for JavaScript that enables interactive maps with NextBillion's vector tiles service in your web apps, basing on Maplibre.
 
-## Available Scripts
+# Development
 
-In the project directory, you can run:
+Before start, please install `Node.js` and `yarn` to install dependencies.
 
-### `npm start`
+```bash
+yarn
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+You can start developing with this command:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+yarn dev
+```
 
-### `npm test`
+You can build a minified version of the SDK with this command:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+yarn build
+```
 
-### `npm run build`
+# Usage
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Plain HTML
+```Html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>NBMap GL Basic Example</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+      #map {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://maps-gl.nextbillion.io/maps/v2/api/css"></link>
+    <script src="https://maps-gl.nextbillion.io/maps/v2/api/js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      nextbillion.setApiKey('Your API key')
+      var nbmap = new nextbillion.maps.Map({
+        container: document.getElementById('map'),
+        style: 'https://api.nextbillion.io/maps/streets/style.json',
+        zoom: 11,
+        center: { lat: 34.08572, lng: -118.324569 },
+      })
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+      nbmap.on('load', function () {
+        const marker = new nextbillion.maps.Marker().setLngLat({ lat: 34.08572, lng: -118.324569 }).addTo(nbmap.map)
+      })
+    </script>
+  </body>
+</html>
+```
+## Typescript
+```Typescript
+import '@nbai/nbmap-gl/dist/nextbillion.css';
+import nextbillion, { Map, Marker } from '@nbai/nbmap-gl';
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+nextbillion.setApiKey('Your API key');
+const nbmap = new Map({
+  container: 'map',
+  style: 'https://api.nextbillion.io/maps/streets/style.json',
+  zoom: 11,
+  center: { lat: 34.08572, lng: -118.324569 },
+});
+nbmap.on('load', () => {
+  const marker: Marker = new Marker()
+    .setLngLat({ lat: 34.08572, lng: -118.324569 })
+    .addTo(nbmap.map);
+})
+```
